@@ -4,11 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import async_session
-from app.grouping import get_or_create_open_group
+from app.servises.grouping import get_or_create_open_group
 from app.models import DocumentFile
-from app.storage import download_telegram_photo
+from app.servises.storage import download_telegram_photo
+import logging
 
 router = APIRouter()
+lg = logging.getLogger(__name__)
 
 
 @router.post(settings.webhook_path)
@@ -17,6 +19,7 @@ async def telegram_webhook(request: Request, background_tasks: BackgroundTasks):
 
     message = update.get("message")
     update_id = update.get("update_id")
+    lg.info(f"Получен запрос: {update_id}")
 
     # Игнорируем сообщения, если нет фото
     if not message or "photo" not in message or update_id is None:

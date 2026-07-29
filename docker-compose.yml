@@ -2,6 +2,7 @@ services:
   traefik:
     image: traefik:v3.6.1
     restart: unless-stopped
+    container_name: tr
     environment:
       - "DOCKER_API_VERSION=1.45"
     command:
@@ -27,6 +28,7 @@ services:
   db:
     image: postgres:16-alpine
     restart: unless-stopped
+    container_name: db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -43,6 +45,7 @@ services:
   app:
     build: .
     restart: unless-stopped
+    container_name: app
     env_file: .env
     depends_on:
       db:
