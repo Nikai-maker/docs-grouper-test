@@ -2,8 +2,8 @@ from fastapi import APIRouter, BackgroundTasks, Request
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import settings
-from app.database import async_session
+from app.core.config import settings
+from app.core.database import async_session
 from app.grouping import get_or_create_open_group
 from app.models import DocumentFile
 from app.storage import download_telegram_photo
@@ -54,6 +54,8 @@ async def telegram_webhook(request: Request, background_tasks: BackgroundTasks):
     # Отвечает телеге, не дожидаяь скачивания
     return {"ok": True}
 
+async def _send_reply(sender_id):
+    pass
 
 async def _download_and_update(file_row_id, telegram_file_id: str, group_id) -> None:
     """Фоновая задача: скачивает файл и обновляет статус записи"""

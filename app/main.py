@@ -3,11 +3,11 @@ from contextlib import asynccontextmanager
 import httpx
 from fastapi import FastAPI
 
-from app.config import settings
-from app.database import init_db
-from app.documents_api import router as documents_router
-from app.grouping import group_closer_loop
-from app.telegram_webhook import router as telegram_router
+from app.core.config import settings
+from app.core.database import init_db
+from app.api.documents_api import router as documents_router
+from app.servises.grouping import group_closer_loop
+from app.api.telegram_webhook import router as telegram_router
 
 
 @asynccontextmanager

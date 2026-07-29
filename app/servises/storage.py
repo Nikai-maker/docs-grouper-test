@@ -4,7 +4,7 @@ import uuid
 
 import httpx
 
-from app.config import settings
+from app.core.config import settings
 
 TELEGRAM_API = f"https://api.telegram.org/bot{settings.bot_token}"
 TELEGRAM_FILE_API = f"https://api.telegram.org/file/bot{settings.bot_token}"

@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.database import get_session
+from app.core.database import get_session
 from app.models import DocumentGroup, GroupStatus
 from app.schemas import AckResponse, GroupOut
 

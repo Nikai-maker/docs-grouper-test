@@ -4,8 +4,8 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import settings
-from app.database import async_session
+from app.core.config import settings
+from app.core.database import async_session
 from app.models import DocumentGroup, GroupStatus
 
 
