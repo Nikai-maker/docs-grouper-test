@@ -12,11 +12,17 @@
    не будет отдаваться повторно.
 """
 
+import sys
 import time
+from pathlib import Path
 
 import httpx
 
-BASE_URL = "http://localhost:8000"
+# Добавляем корень проекта в PYTHONPATH
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from app.core.config import settings
+
+BASE_URL = settings.webhook_url
 POLL_INTERVAL_SECONDS = 15
 
 
