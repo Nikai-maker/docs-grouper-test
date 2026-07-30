@@ -43,4 +43,5 @@ class DocumentFile(Base):
 
     received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
+    # Удобство обращения к DocumentGroup объекту
     group: Mapped["DocumentGroup"] = relationship(back_populates="files")

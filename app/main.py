@@ -1,14 +1,14 @@
+import logging
 from contextlib import asynccontextmanager
 
 import httpx
 from fastapi import FastAPI
 
+from app.api.documents_api import router as documents_router
+from app.api.telegram_webhook import router as telegram_router
 from app.core.config import settings
 from app.core.database import init_db
-from app.api.documents_api import router as documents_router
 from app.servises.grouping import group_closer_loop
-from app.api.telegram_webhook import router as telegram_router
-import logging
 
 logging.basicConfig(
     level=logging.INFO,
@@ -31,7 +31,7 @@ async def lifespan(app: FastAPI):
         except httpx.HTTPError as e:
             lg.info(f"[startup] failed to set webhook: {e}")
 
-    lg.info(f"webhook в телеграм установлен")
+    lg.info("webhook в телеграм установлен")
     import asyncio
     task = asyncio.create_task(group_closer_loop())
 
