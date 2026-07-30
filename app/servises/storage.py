@@ -36,6 +36,8 @@ async def download_telegram_photo(telegram_file_id: str, group_id: uuid.UUID) ->
                 file_name = f"{uuid.uuid4()}_{os.path.basename(file_path)}"
                 local_path = os.path.join(group_dir, file_name)
 
+                # Далее синхронная функция. Для текущего объема задержка в миллисекунды не критична
+                # Но на проде переводим в asyncio.to_thread или через aiofiles
                 with open(local_path, "wb") as f:
                     f.write(file_resp.content)
 

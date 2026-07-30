@@ -3,7 +3,6 @@ import logging
 from fastapi import APIRouter, BackgroundTasks, Request
 from sqlalchemy import update as sa_update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import async_session
