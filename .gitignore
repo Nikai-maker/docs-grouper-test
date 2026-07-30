@@ -4,3 +4,5 @@ __pycache__/
 storage/
 .venv/
 .vs*
+.gig*
+.dee*
