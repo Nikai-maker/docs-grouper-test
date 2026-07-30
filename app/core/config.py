@@ -19,5 +19,13 @@ class Settings(BaseSettings):
     # Storage
     storage_path: str = "/app/storage"
 
+    @property
+    def telegram_api_url(self) -> str:
+        return f"https://api.telegram.org/bot{self.bot_token}"
+
+    @property
+    def telegram_file_api_url(self) -> str:
+        return f"https://api.telegram.org/file/bot{self.bot_token}"
+
 
 settings = Settings()

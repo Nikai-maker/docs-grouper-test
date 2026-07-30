@@ -12,7 +12,7 @@ class Base(DeclarativeBase):
 
 
 async def init_db() -> None:
-    """Создаёт таблицы, если их ещё нет. Для тестового достаточно, без Alembic."""
+    """Создаёт таблицы, если их ещё нет. Без Alembic"""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 

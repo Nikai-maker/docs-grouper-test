@@ -1,13 +1,15 @@
+import logging
+
 from fastapi import APIRouter, BackgroundTasks, Request
+from sqlalchemy import update as sa_update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import async_session
-from app.servises.grouping import get_or_create_open_group
 from app.models import DocumentFile
+from app.servises.grouping import get_or_create_open_group
 from app.servises.storage import download_telegram_photo
-import logging
 
 router = APIRouter()
 lg = logging.getLogger(__name__)
@@ -50,19 +52,16 @@ async def telegram_webhook(request: Request, background_tasks: BackgroundTasks):
 
         file_row_id = result.scalar_one_or_none()
 
-    # если это дубль (конфликт) — file_row_id будет None, скачивать нечего
+    # если это дубль (конфликт) - file_row_id будет None, скачивать нечего
     if file_row_id is not None:
         background_tasks.add_task(_download_and_update, file_row_id, telegram_file_id, group_id)
 
+    lg.info("Запрос обработан")
     # Отвечает телеге, не дожидаяь скачивания
     return {"ok": True}
 
-async def _send_reply(sender_id):
-    pass
-
 async def _download_and_update(file_row_id, telegram_file_id: str, group_id) -> None:
     """Фоновая задача: скачивает файл и обновляет статус записи"""
-    from sqlalchemy import update as sa_update
 
     local_path = await download_telegram_photo(telegram_file_id, group_id)
 

@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select, update
@@ -8,11 +9,12 @@ from app.core.config import settings
 from app.core.database import async_session
 from app.models import DocumentGroup, GroupStatus
 
+lg = logging.getLogger(__name__)
 
 async def get_or_create_open_group(session: AsyncSession, sender_id: int) -> DocumentGroup:
     """
     Возвращает открытую группу отправителя, если она не устарела, иначе создаёт новую
-    Группировка только в рамках одного отправителя (см. README, раздел "Ограничения")
+    Группировка только в рамках одного отправителя
     """
     timeout = timedelta(minutes=settings.group_timeout_minutes)
     cutoff = datetime.now(timezone.utc) - timeout
@@ -27,11 +29,11 @@ async def get_or_create_open_group(session: AsyncSession, sender_id: int) -> Doc
     result = await session.execute(stmt)
     group = result.scalars().first()
 
-    if group is None:
+    if group is None:  # Если группа не нашлась
         group = DocumentGroup(sender_id=sender_id)
         session.add(group)
         await session.flush()  # чтобы получить group.id до коммита
-    else:
+    else:  # Если группа нашлась
         group.last_photo_at = datetime.now(timezone.utc)
 
     return group
@@ -64,7 +66,7 @@ async def group_closer_loop() -> None:
             async with async_session() as session:
                 closed = await close_stale_groups(session)
                 if closed:
-                    print(f"[group_closer] closed {closed} stale group(s)")
+                    lg.info(f"[group_closer] closed {closed} stale group(s)")
         except Exception as e:
             # не даём фоновому циклу упасть насовсем из-за единичной ошибки БД
-            print(f"[group_closer] error: {e}")
+            lg.error(f"[group_closer] error: {e}")
