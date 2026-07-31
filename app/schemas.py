@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 class FileOut(BaseModel):
     id: uuid.UUID
-    local_path: str | None
+    download_url: str
     download_status: str
     received_at: datetime
 

@@ -39,7 +39,7 @@ def main():
             for group in groups:
                 print(f"\nГруппа {group['id']} (отправитель {group['sender_id']}):")
                 for f in group["files"]:
-                    print(f"  - {f['local_path']} [{f['download_status']}]")
+                    print(f"  - {f['download_url']} [{f['download_status']}]")
 
                 ack = httpx.post(f"{BASE_URL}/documents/{group['id']}/ack")
                 print(f"  ack -> {ack.json()['status']}")
